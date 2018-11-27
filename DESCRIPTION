@@ -15,3 +15,5 @@ LazyData: true
 Imports:
     ckanr,
     tidyverse
+URL: https://github.com/jdjohn215/milwaukeer
+BugReports: https://github.com/jdjohn215/milwaukeer/issues
