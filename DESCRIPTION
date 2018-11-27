@@ -1,0 +1,17 @@
+Package: milwaukeer
+Type: Package
+Title: Retrieves Data From Data.Milwaukee.Gov
+Version: 0.0.0.9000
+Authors@R:person("John D.", "Johnson", email = "john.d.johnson@marquette.edu",
+  role = c("aut", "cre"))
+Description: Retrieves data from Milwaukee's Open Data portal as R dataframes.
+    Available options currently include public records on property, public 
+    safety, and elections. Wherever feasible, this package allows the user to
+    subset datasets to custom geographic areas as well as a variety of
+    pre-included geographies.
+License: CC0
+Encoding: UTF-8
+LazyData: true
+Imports:
+    ckanr,
+    tidyverse
