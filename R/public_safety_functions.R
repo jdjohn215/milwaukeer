@@ -15,7 +15,7 @@ get_wibrs <- function() {
 
 
 # Get traffic accidents
-get_trafficaccidents <- function() {
+get_TrafficAccidents <- function() {
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "8fffaa3a-b500-4561-8898-78a424bdacee", as = "table")
   start <- Sys.time()
@@ -27,7 +27,7 @@ get_trafficaccidents <- function() {
 }
 
 # Get Milwaukee Fire Department actions
-get_fireincidents <- function() {
+get_FireIncidents <- function() {
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "ed310d17-2a6d-4334-9102-ff20f4462743", as = "table")
   start <- Sys.time()
@@ -49,3 +49,4 @@ get_ems <- function() {
   print(paste("Download time:", round(fetchTime, 2), "seconds."))
   raw
 }
+

@@ -12,7 +12,7 @@ Description: Retrieves data from Milwaukee's Open Data portal as R dataframes.
 License: CC0
 Encoding: UTF-8
 LazyData: true
-Imports:
+Depends:
     ckanr,
     tidyverse
 URL: https://github.com/jdjohn215/milwaukeer
