@@ -1,20 +1,6 @@
 # This file builds functions which retrieve housing and property data
 # It requires ckanr and tidyverse
 
-# Get MPROP data
-## right now this function just grabs the current file
-## in the future, build in an ability to grab historical files
-get_mprop <- function() {
-  ckanr_setup(url = "https://data.milwaukee.gov")
-  res <- resource_show(id = "0a2c7f31-cd15-4151-8222-09dd57d5f16d", as = "table")
-  start <- Sys.time()
-  raw <- fetch(res$url)
-  end <- Sys.time()
-  fetchTime <- difftime(end, start, units = "secs")
-  print(paste("Download time:", round(fetchTime, 2), "seconds."))
-  raw
-}
-
 # Get the city's master address index
 get_mai <- function() {
   ckanr_setup(url = "https://data.milwaukee.gov")
