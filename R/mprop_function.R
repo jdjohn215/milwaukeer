@@ -3,6 +3,25 @@
 ## in the future, build in an ability to grab historical files
 ## which are in difficult to unzip file formats like zipped xlsx
 
+#' Retrieve the Master Property List (MPROP)
+#'
+#' \code{get_mprop} returns a data.frame containing the complete MPROP file
+#'   for each specified year. The column "year" indicates the MPROP vintage.
+#'   Currently only the years 2016 to 2018 are available. 2018 data is updated
+#'   daily.
+#'
+#'  Refer to the data dictionary for variable descriptions:
+#'   \url{https://data.milwaukee.gov/dataset/mprop}
+#'
+#' @param start_year The first year to be included.
+#' @param end_year The last year to be included.
+#' @return A dataframe.
+#'
+#'
+#' @examples
+#' get_mprop(start_year = 2016, end_year = 2018)
+#' get_mprop(start_year = 2018, end_year = 2018)
+
 get_mprop <- function(start_year, end_year) {
   ckanr_setup(url = "https://data.milwaukee.gov")
   start <- Sys.time()
