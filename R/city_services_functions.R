@@ -53,29 +53,38 @@ get_GarbageViolations <- function(start_date, end_date, shape, include_missing) 
            address_NoSTTYPE = str_squish(address_NoSTTYPE))
 
   # Join simple addresses
+  join.list <- list()
   join1 <- inner_join(date.sliced, mai[,c("address_all","x","y")], by = c("address_match" = "address_all"))
-  missing1 <- anti_join(date.sliced, join1)
+  missing <- anti_join(date.sliced, join1)
+  join.list[[(length(join.list) + 1)]] <- join1
 
-  # Join, trying MAI addresses with street type
-  join2 <- inner_join(missing1, mai[,c("address_NoSTTYPE", "x", "y")],
-                      by = c("address_match" = "address_NoSTTYPE"))
-  missing2 <- anti_join(missing1, join2)
+  # Join, trying MAI addresses without street type
+  if(nrow(missing) > 0){
+    join2 <- inner_join(missing, mai[,c("address_NoSTTYPE", "x", "y")],
+                        by = c("address_match" = "address_NoSTTYPE"))
+    missing <- anti_join(missing, join2)
+    join.list[[(length(join.list) + 1)]] <- join2
+    if(nrow(missing) > 0){
+      # Join, source addresses with no street type
+      missing$address_NoSTTYPE <- remove_STTYPE(missing)
 
-  # Join, source addresses with no street type
-  missing2$address_NoSTTYPE <- remove_STTYPE(missing2)
+      join3 <- inner_join(missing, mai[,c("address_NoSTTYPE", "x", "y")])
+      missing <- anti_join(missing, join3)
+      join.list[[(length(join.list) + 1)]] <- join3
+      if(nrow(missing) > 0){
+        # Attempt to geocode using city address then DIME geocoder
+        join4 <- geocode_address(batch = missing, fields = "address_match") %>%
+          filter(x != "error") %>%
+          mutate(x = as.numeric(x),
+                 y = as.numeric(y))
+        missing <- anti_join(missing, join4)
+        join.list[[(length(join.list) + 1)]] <- join4
+      }
+    }
+  }
 
-  join3 <- inner_join(missing2, mai[,c("address_NoSTTYPE", "x", "y")])
-  missing3 <- anti_join(missing2, join3)
-
-  # Attempt to geocode using city address then DIME geocoder
-  join4 <- geocode_address(batch = missing3, fields = "address_match") %>%
-    filter(x != "error") %>%
-    mutate(x = as.numeric(x),
-           y = as.numeric(y))
-  missing4 <- anti_join(missing3, join4)
-
-  all.joined <- bind_rows(join1, join2, join3, join4)
-  print(paste(length(missing4$address_match), "cases missing out of",
+  all.joined <- bind_rows(join.list)
+  print(paste(length(missing$address_match), "cases missing out of",
               length(date.sliced$Address)))
 
   if(!missing(shape)){
@@ -91,7 +100,8 @@ get_GarbageViolations <- function(start_date, end_date, shape, include_missing) 
     all.joined <- bind_rows(all.joined, missing3)
   }
 
-  all.joined
+  all.joined %>%
+    select(-address_match, -address_NoSTTYPE)
 }
 
 # Get call center date, filtered by date
