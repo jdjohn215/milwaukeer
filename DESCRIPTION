@@ -12,6 +12,9 @@ Description: Retrieves data from Milwaukee's Open Data portal as R dataframes.
 License: CC0
 Encoding: UTF-8
 LazyData: true
+Imports:
+    RCurl,
+    jsonlite
 Depends:
     ckanr,
     tidyverse
