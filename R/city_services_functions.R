@@ -38,7 +38,7 @@ get_GarbageViolations <- function(start_date, end_date, shape, include_missing) 
            address_match = str_replace(address_match, " ST ST", " ST"))
 
   # join to MAI
-  mai <- read_csv("~/Desktop/Work/2018/December/mkeR/AddressCoordinates/MAI_with_coords_simple.csv") %>%
+  mai <- mai %>%
     mutate(address_all = paste(HSE_NBR, DIR, STREET, STTYPE, SFX, UNIT_NBR),
            address_all = str_replace_all(address_all, " NA ", " "),
            address_all = replace(address_all, str_sub(address_all, -3) == " NA",
