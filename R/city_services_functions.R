@@ -1,7 +1,12 @@
 # This file builds city services functions including those for
 # garbage violations and call center data
 
-get_GarbageViolations <- function(start_date, end_date) {
+get_GarbageViolations <- function(start_date, end_date, shape, include_missing) {
+  # Make missings default value false
+  if(missing(include_missing)){
+    include_missing = FALSE
+  }
+
   ckanr_setup(url = "https://data.milwaukee.gov")
   start <- Sys.time()
   res.historical <- resource_show(id = "665d15b0-71b7-45cd-9864-4648fec06219", as = "table")
@@ -22,7 +27,71 @@ get_GarbageViolations <- function(start_date, end_date) {
     end_date <- max(raw$DateOpened)
   date.sliced <- raw %>%
     filter(DateOpened >= as.Date(start_date),
-           DateOpened <= as.Date(end_date))
+           DateOpened <= as.Date(end_date)) %>%
+    mutate(address_match = str_to_upper(Address),
+           address_match = str_replace(address_match, "MILWAUKEE, WISCONSIN", "MILWAUKEE, WI"),
+           address_match = str_remove_all(address_match, ","),
+           address_match = word(address_match, 1, -2),
+           address_match = str_remove_all(address_match, "#"),
+           address_match = str_remove(address_match, "MILWAUKEE WI"),
+           address_match = str_squish(address_match),
+           address_match = str_replace(address_match, " ST ST", " ST"))
+
+  # join to MAI
+  mai <- read_csv("~/Desktop/Work/2018/December/mkeR/AddressCoordinates/MAI_with_coords_simple.csv") %>%
+    mutate(address_all = paste(HSE_NBR, DIR, STREET, STTYPE, SFX, UNIT_NBR),
+           address_all = str_replace_all(address_all, " NA ", " "),
+           address_all = replace(address_all, str_sub(address_all, -3) == " NA",
+                                 str_sub(address_all[str_sub(address_all, -3) == " NA"], 1, -4)),
+           address_all = str_to_upper(address_all),
+           address_all = str_squish(address_all),
+           address_NoSTTYPE = paste(HSE_NBR, DIR, STREET),
+           address_NoSTTYPE = str_replace_all(address_NoSTTYPE, " NA ", " "),
+           address_NoSTTYPE = replace(address_NoSTTYPE, str_sub(address_NoSTTYPE, -3) == " NA",
+                                      str_sub(address_NoSTTYPE[str_sub(address_NoSTTYPE, -3) == " NA"], 1, -4)),
+           address_NoSTTYPE = str_to_upper(address_NoSTTYPE),
+           address_NoSTTYPE = str_squish(address_NoSTTYPE))
+
+  # Join simple addresses
+  join1 <- inner_join(date.sliced, mai[,c("address_all","x","y")], by = c("address_match" = "address_all"))
+  missing1 <- anti_join(date.sliced, join1)
+
+  # Join, trying MAI addresses with street type
+  join2 <- inner_join(missing1, mai[,c("address_NoSTTYPE", "x", "y")],
+                      by = c("address_match" = "address_NoSTTYPE"))
+  missing2 <- anti_join(missing1, join2)
+
+  # Join, source addresses with no street type
+  missing2$address_NoSTTYPE <- remove_STTYPE(missing2)
+
+  join3 <- inner_join(missing2, mai[,c("address_NoSTTYPE", "x", "y")])
+  missing3 <- anti_join(missing2, join3)
+
+  # Attempt to geocode using city address then DIME geocoder
+  join4 <- geocode_address(batch = missing3, fields = "address_match") %>%
+    filter(x != "error") %>%
+    mutate(x = as.numeric(x),
+           y = as.numeric(y))
+  missing4 <- anti_join(missing3, join4)
+
+  all.joined <- bind_rows(join1, join2, join3, join4)
+  print(paste(length(missing4$address_match), "cases missing out of",
+              length(date.sliced$Address)))
+
+  if(!missing(shape)){
+    # Make sf object
+    all.joined <- all.joined %>%
+      st_as_sf(crs = 32054, coords = c("x", "y")) %>%
+      st_transform(st_crs(shape)) %>%
+      # Filter spatially
+      st_intersection(shape)
+  }
+
+  if(include_missing == TRUE){
+    all.joined <- bind_rows(all.joined, missing3)
+  }
+
+  all.joined
 }
 
 # Get call center date, filtered by date
