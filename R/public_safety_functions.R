@@ -195,19 +195,22 @@ get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
     tidyr::separate(col = "CASEDATE", sep = " ", into = c("date", "time")) %>%
     mutate(date = as.Date(date))
 
+  raw3 <- raw2 %>%
+    filter(!is.na(date))
+
   # Filter by date and time, default to full range of data
   if(missing(start_date)){
-    start_date <- min(raw2$date[!is.na(raw2$date)])
+    start_date <- min(raw3$date)
   }
   if(missing(end_date)){
-    end_date <- max(raw2$date[!is.na(raw2$date)])
+    end_date <- max(raw3$date)
   }
 
-  date.filtered <- raw2 %>%
-    filter(date >= start_date,
-           date <= end_date)
+  date.filtered <- raw3 %>%
+    filter(date >= as.Date(start_date),
+           date <= as.Date(end_date))
 
-  missing.date <- length(raw$CASENUMBER) - length(date.filtered$CASENUMBER)
+  missing.date <- length(raw2$CASENUMBER) - length(raw3$CASENUMBER)
   print(paste(missing.date, "Incidents are missing properly formatted dates.",
               "Set include_missingDate = TRUE to include them."))
 
@@ -216,7 +219,7 @@ get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
   }
 
   if(include_missingDate == TRUE){
-    no.date <- anti_join(raw2, date.filtered)
+    no.date <- anti_join(raw2, raw3)
     date.filtered <- bind_rows(date.filtered, no.date)
   }
 
@@ -224,7 +227,12 @@ get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
 }
 
 # Get Milwaukee Fire Department actions
-get_FireIncidents <- function() {
+get_FireIncidents <- function(start_date, end_date, include_missingDate, spatial, shape) {
+  # Make spatial have default of false
+  if(missing(spatial)){
+    spatial = FALSE
+  }
+
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "ed310d17-2a6d-4334-9102-ff20f4462743", as = "table")
   start <- Sys.time()
@@ -232,7 +240,64 @@ get_FireIncidents <- function() {
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))
-  raw
+
+  # Split datetime into two variables
+  raw2 <- raw %>%
+    tidyr::separate(col = "Date.Received", sep = " ", into = c("DateReceived", "TimeReceived")) %>%
+    mutate(date = as.Date(DateReceived))
+
+  # filter out missing dates
+  raw3 <- raw2 %>%
+    filter(!is.na(DateReceived))
+
+  # Filter by date and time, default to full range of data
+  if(missing(start_date)){
+    start_date <- min(raw3$DateReceived)
+  }
+  if(missing(end_date)){
+    end_date <- max(raw3$DateReceived)
+  }
+
+  date.filtered <- raw3 %>%
+    filter(DateReceived >= as.Date(start_date),
+           DateReceived <= as.Date(end_date))
+
+  missing.date <- length(raw2$Case.Number) - length(raw3$Case.Number)
+  print(paste(missing.date, "Incidents are missing properly formatted dates.",
+              "Set include_missingDate = TRUE to include them."))
+
+  if(missing(include_missingDate)){
+    include_missingDate = FALSE
+  }
+
+  if(include_missingDate == TRUE){
+    no.date <- anti_join(raw2, raw3)
+    date.filtered <- bind_rows(date.filtered, no.date)
+  }
+
+  # Intersect if shape is present
+  if(!missing(shape)){
+    shape <- st_transform(shape, crs = 32054)
+
+    date.filtered <- st_as_sf(date.filtered, coords = c("Longitude", "Latitude"),
+                     crs = 4326) %>%
+      st_transform(crs = st_crs(shape))
+    date.filtered <- st_intersection(shape, date.filtered)
+
+    # make class(data.frame) if spatial == F
+    if(spatial == FALSE){
+      date.filtered <- date.filtered %>%
+        st_set_geometry(NULL)
+    }
+  }
+
+  # Make date.filtered spatial if spatial==T and missing(shape)
+  if(spatial == TRUE & missing(shape)){
+    date.filtered <- st_as_sf(date.filtered, coords = c("Latitude", "Longitude"),
+                              crs = 32054)
+  }
+
+  date.filtered
 }
 
 # Get emergency medical services trips
