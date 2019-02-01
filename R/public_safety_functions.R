@@ -177,8 +177,8 @@ get_wibrs <- function(start_date, end_date, make_spatial, shape, include_missing
 #' @return A dataframe.
 #'
 #' @examples
-#' get_wibrs()
-#' get_wibrs(start_date = as.Date("2018-01-01"), end_date = as.Date("2018-02-01"))
+#' get_TrafficAccidents()
+#' get_TrafficAccidents(start_date = as.Date("2018-01-01"), end_date = as.Date("2018-02-01"))
 
 # Get traffic accidents
 get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
@@ -225,6 +225,28 @@ get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
 
   date.filtered
 }
+
+#' Retrieve the Fire Incident dataset
+#'
+#' \code{get_FireIncidents} returns a data.frame containing a list of fire dept incidents
+#'   for the requested time period (if specified).
+#'
+#'  Geocoding is based on the coordinates provided in the file. Refer to the data dictionary for variable descriptions:
+#'   \url{https://data.milwaukee.gov/dataset/mfdprimary/resource/ed310d17-2a6d-4334-9102-ff20f4462743}
+#'
+#' @param start_date The first date to be included. Must be coercible to class Date.
+#' Defaults to first date available.
+#' @param end_date The last date to be included. Must be coercible to class Date.
+#' Defaults to last date available.
+#' @param include_missingDate Logical. If TRUE values without a valid date will be included. Defaults to FALSE.
+#' @param make_spatial Logical. If TRUE the output is class sf. Defaults to FALSE.
+#' @param shape An object of class sf. If included, the output will be filtered using
+#' st_intersection
+#' @return A dataframe.
+#'
+#' @examples
+#' get_FireIncidents()
+#' get_FireIncidents(start_date = as.Date("2018-01-01"), end_date = as.Date("2018-02-01"))
 
 # Get Milwaukee Fire Department actions
 get_FireIncidents <- function(start_date, end_date, include_missingDate, spatial, shape) {
