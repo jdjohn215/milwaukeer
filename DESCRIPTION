@@ -15,7 +15,8 @@ LazyData: true
 Imports:
     RCurl,
     jsonlite,
-    stringr
+    stringr,
+    tidyr
 Depends:
     ckanr,
     dplyr,
