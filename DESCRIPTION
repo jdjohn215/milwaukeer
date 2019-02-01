@@ -14,7 +14,8 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     RCurl,
-    jsonlite
+    jsonlite,
+    stringr
 Depends:
     ckanr,
     dplyr,
