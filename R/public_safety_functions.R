@@ -1,6 +1,30 @@
 # This file builds functions which retrieve crime and public safety data
 # It requires ckanr and tidyverse
 
+#' Retrieve the Master Property List (MPROP)
+#'
+#' \code{get_wibrs} returns a data.frame containing the complete WIBRS crime data
+#'   for the requested time period (if specified) and the selected geography
+#'   (if specified).
+#'
+#'  Refer to the data dictionary for variable descriptions:
+#'   \url{https://data.milwaukee.gov/dataset/wibr}
+#'
+#' @param start_date The first date to be included. Must be coercible to class Date.
+#' Defaults to first date available.
+#' @param end_date The last date to be included. Must be coercible to class Date.
+#' Defaults to last date available.
+#' @param make_spatial Logical. If TRUE the output is class sf. Defaults to FALSE.
+#' @param shape An object of class sf. If included, the output will be filtered using
+#' st_intersection
+#' @param include_missing Logical. If TRUE values not geocoded will be added to the output. Defaults to FALSE.
+#' @return A dataframe.
+#'
+#'
+#' @examples
+#' get_wibrs()
+#' get_wibrs(start_date = as.Date("2018-01-01"), end_date = as.Date("2018-02-01"))
+
 # Get WIBRS crime data
 get_wibrs <- function(start_date, end_date, make_spatial, shape, include_missing) {
   if(missing(make_spatial) & missing(shape)){
