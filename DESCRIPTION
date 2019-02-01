@@ -17,7 +17,8 @@ Imports:
     jsonlite
 Depends:
     ckanr,
-    tidyverse
+    dplyr,
+    sf
 URL: https://github.com/jdjohn215/milwaukeer
 BugReports: https://github.com/jdjohn215/milwaukeer/issues
 RoxygenNote: 6.1.1
