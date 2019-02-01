@@ -19,7 +19,7 @@ remove_STTYPE <- function(data){
 
   # iterate through possible street types
   for(i in seq_along(street.types)){
-    positions <- str_locate(temp$address_match, pattern = street.types[i])
+    positions <- stringr::str_locate(temp$address_match, pattern = street.types[i])
     positions <- data.frame(positions)
     positions$row <- 1:length(positions$start)
     position.list[[i]] <- positions
@@ -39,11 +39,11 @@ remove_STTYPE <- function(data){
            end = replace(end, is.na(end), nchar(address_match[is.na(end)])))
 
   # Create variable with address string cut off just before street type
-  temp$address_NoSTTYPE <- str_sub(temp$address_match,
+  temp$address_NoSTTYPE <- stringr::str_sub(temp$address_match,
                                    start = 1, end = temp$start)
 
   # output the address_NoSTTYPE column
-  str_squish(temp$address_NoSTTYPE)
+  stringr::str_squish(temp$address_NoSTTYPE)
 }
 
 # This function runs address strings through the city of Milwaukee's...
