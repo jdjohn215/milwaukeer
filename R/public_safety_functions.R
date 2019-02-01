@@ -1,7 +1,7 @@
 # This file builds functions which retrieve crime and public safety data
 # It requires ckanr and tidyverse
 
-#' Retrieve the Master Property List (MPROP)
+#' Retrieve the Wisconsin Incident Based Report (WIBR) dataset
 #'
 #' \code{get_wibrs} returns a data.frame containing the complete WIBRS crime data
 #'   for the requested time period (if specified) and the selected geography
@@ -160,9 +160,28 @@ get_wibrs <- function(start_date, end_date, make_spatial, shape, include_missing
   complete
 }
 
+#' Retrieve the Traffic Accident dataset
+#'
+#' \code{get_TrafficAccidents} returns a data.frame containing a list of traffic accidents
+#'   for the requested time period (if specified).
+#'
+#'  Currently, geocoding is not available
+#'   for this resource because locations are not given as standard addresses. Refer to the data dictionary for variable descriptions:
+#'   \url{https://data.milwaukee.gov/dataset/trafficaccident}
+#'
+#' @param start_date The first date to be included. Must be coercible to class Date.
+#' Defaults to first date available.
+#' @param end_date The last date to be included. Must be coercible to class Date.
+#' Defaults to last date available.
+#' @param include_missingDate Logical. If TRUE values without a valid date will be included. Defaults to FALSE.
+#' @return A dataframe.
+#'
+#' @examples
+#' get_wibrs()
+#' get_wibrs(start_date = as.Date("2018-01-01"), end_date = as.Date("2018-02-01"))
 
 # Get traffic accidents
-get_TrafficAccidents <- function() {
+get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "8fffaa3a-b500-4561-8898-78a424bdacee", as = "table")
   start <- Sys.time()
@@ -170,7 +189,38 @@ get_TrafficAccidents <- function() {
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))
-  raw
+
+  # Split datetime into two variables
+  raw2 <- raw %>%
+    tidyr::separate(col = "CASEDATE", sep = " ", into = c("date", "time")) %>%
+    mutate(date = as.Date(date))
+
+  # Filter by date and time, default to full range of data
+  if(missing(start_date)){
+    start_date <- min(raw2$date[!is.na(raw2$date)])
+  }
+  if(missing(end_date)){
+    end_date <- max(raw2$date[!is.na(raw2$date)])
+  }
+
+  date.filtered <- raw2 %>%
+    filter(date >= start_date,
+           date <= end_date)
+
+  missing.date <- length(raw$CASENUMBER) - length(date.filtered$CASENUMBER)
+  print(paste(missing.date, "Incidents are missing properly formatted dates.",
+              "Set include_missingDate = TRUE to include them."))
+
+  if(missing(include_missingDate)){
+    include_missingDate = FALSE
+  }
+
+  if(include_missingDate == TRUE){
+    no.date <- anti_join(raw2, date.filtered)
+    date.filtered <- bind_rows(date.filtered, no.date)
+  }
+
+  date.filtered
 }
 
 # Get Milwaukee Fire Department actions
