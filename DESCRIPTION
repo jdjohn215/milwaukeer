@@ -1,7 +1,7 @@
 Package: milwaukeer
 Type: Package
 Title: Retrieves Data From Data.Milwaukee.Gov
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: person("John D.", "Johnson", email = "john.d.johnson@marquette.edu",
   role = c("aut", "cre"))
 Description: Retrieves data from Milwaukee's Open Data portal as R dataframes.
