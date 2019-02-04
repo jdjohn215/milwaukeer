@@ -19,7 +19,12 @@
 #' st_intersection
 #' @param include_missing Logical. If TRUE values not geocoded will be added to the output. Defaults to FALSE.
 #' @return A dataframe.
-#'
+#' @export
+#' @import dplyr
+#' @import sf
+#' @importFrom ckanr resource_show
+#' @importFrom ckanr fetch
+#' @importFrom ckanr ckanr_setup
 #'
 #' @examples
 #' get_wibrs()
@@ -175,6 +180,12 @@ get_wibrs <- function(start_date, end_date, make_spatial, shape, include_missing
 #' Defaults to last date available.
 #' @param include_missingDate Logical. If TRUE values without a valid date will be included. Defaults to FALSE.
 #' @return A dataframe.
+#' @export
+#' @import dplyr
+#' @import sf
+#' @importFrom ckanr resource_show
+#' @importFrom ckanr fetch
+#' @importFrom ckanr ckanr_setup
 #'
 #' @examples
 #' get_TrafficAccidents()
@@ -243,6 +254,12 @@ get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
 #' @param shape An object of class sf. If included, the output will be filtered using
 #' st_intersection
 #' @return A dataframe.
+#' @export
+#' @import dplyr
+#' @import sf
+#' @importFrom ckanr resource_show
+#' @importFrom ckanr fetch
+#' @importFrom ckanr ckanr_setup
 #'
 #' @examples
 #' get_FireIncidents()
@@ -337,6 +354,12 @@ get_FireIncidents <- function(start_date, end_date, include_missingDate, spatial
 #' Defaults to last date available.
 #' @param include_missingDate Logical. If TRUE values without a valid date will be included. Defaults to FALSE.
 #' @return A dataframe.
+#' @export
+#' @import dplyr
+#' @import sf
+#' @importFrom ckanr resource_show
+#' @importFrom ckanr fetch
+#' @importFrom ckanr ckanr_setup
 #'
 #' @examples
 #' get_ems()

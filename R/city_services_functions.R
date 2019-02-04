@@ -19,7 +19,12 @@
 #' st_intersection
 #' @param include_missing Logical. If TRUE values not geocoded will be added to the output. Defaults to FALSE.
 #' @return A dataframe.
-#'
+#' @export
+#' @import dplyr
+#' @import sf
+#' @importFrom ckanr resource_show
+#' @importFrom ckanr fetch
+#' @importFrom ckanr ckanr_setup
 #'
 #' @examples
 #' get_GarbageViolations()
