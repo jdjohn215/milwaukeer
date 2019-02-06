@@ -360,5 +360,6 @@ get_CallCenter <- function(start_date, end_date, spatial, shape, include_missing
 
     final.data <- all.joined
   }
-  final.data
+  final.data <- final.data %>%
+    ungroup()
 }
