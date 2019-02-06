@@ -347,7 +347,7 @@ get_CallCenter <- function(start_date, end_date, spatial, shape, include_missing
     }
 
     # If shape is not specified, but spatial == TRUE
-    if(!missing(shape) & spatial == TRUE){
+    if(missing(shape) & spatial == TRUE){
       all.joined <- all.joined %>%
         sf::st_as_sf(coords = c("x", "y"),
                      crs = 32054)
