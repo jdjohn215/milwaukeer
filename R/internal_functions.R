@@ -12,7 +12,8 @@ remove_STTYPE <- function(data){
 
   # make vector of street types surrounded by spaces
   street.types <- c(" AV ", " DR ", " ST ", " RD ", " BL ", " PL ",
-                    " LA ", " CR ", " WA ", " CT ", " TR ", " PK ")
+                    " LA ", " CR ", " WA ", " CT ", " TR ", " PK ",
+                    " BI ", " WY ")
 
   # make empty list
   position.list <- list()
