@@ -677,7 +677,48 @@ get_LeadService <- function(shape, spatial, include_missing){
 }
 
 # Get city-owned improved properties sold
-get_ImprovedSales <- function(start_year, end_year) {
+
+#' \code{get_ImprovedSales} returns a data.frame containing addresses of every foreclosed
+#' property sold by the city. The data.frame can be geocoded
+#'  (if specified) and filtered for the selected geography (if specified).
+#'
+#'  Refer to the data dictionary for further information:
+#'   \url{https://data.milwaukee.gov/dataset/total-number-of-city-owned-improved-properties-sold-by-year}
+#'
+#' @param start_year a numeric value. Defaults to earliest available
+#' @param end_year a numeric value. Defaults to last available.
+#' @param spatial Logical. If TRUE the output is class sf. Defaults to FALSE.
+#' @param shape An object of class sf. If included, the output will be filtered using
+#' st_intersection
+#' @param include_missing Logical. If TRUE values not geocoded will be added to the output.
+#' Defaults to FALSE.
+#' @return A dataframe.
+#' @export
+#' @import dplyr
+#' @import sf
+#' @importFrom ckanr resource_show
+#' @importFrom ckanr fetch
+#' @importFrom ckanr ckanr_setup
+#'
+#' @examples
+#' get_ImprovedSales()
+#' get_ImprovedSales(spatial = TRUE)
+
+get_ImprovedSales <- function(start_year, end_year, shape, spatial, include_missing) {
+  # set defaults
+  if(missing(start_year)){
+    start_year = 2014
+  }
+  if(missing(end_year)){
+    end_year = as.numeric(stringr::str_sub(Sys.Date(), 1, 4))
+  }
+  if(missing(spatial)){
+    spatial = FALSE
+  }
+  if(missing(include_missing)){
+    include_missing = FALSE
+  }
+
   ckanr_setup(url = "https://data.milwaukee.gov")
   start <- Sys.time()
   years <- start_year:end_year
@@ -712,5 +753,38 @@ get_ImprovedSales <- function(start_year, end_year) {
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))
-  raw
+  d.output <- raw
+
+  if(!missing(shape) | spatial == TRUE){
+    d.spatial <- raw %>%
+      mutate(`Key.No.` = stringr::str_pad(`Key.No.`, pad = "0", width = 10, side = "left"),
+             uniqueID = 1:nrow(raw)) %>%
+      inner_join(mai[,c("TAXKEY", "x", "y")],
+                 by = c("Key.No." = "TAXKEY")) %>%
+      group_by(uniqueID) %>%
+      filter(row_number() == 1) %>%
+      select(-uniqueID) %>%
+      sf::st_as_sf(coords = c("x", "y"),
+                   crs = 32054)
+
+    missing.cases <- nrow(raw) - nrow(d.spatial)
+    print(paste(missing.cases, "cases unable to be geocoded. Use include_missing = TRUE to include them in output."))
+
+    if(!missing(shape)){
+      d.spatial <- d.spatial %>%
+        st_transform(crs = st_crs(shape)) %>%
+        st_intersection(shape)
+    }
+
+    if(spatial == FALSE){
+      d.spatial <- st_set_geometry(d.spatial, NULL)
+    }
+
+    if(include_missing == TRUE & missing.cases > 0){
+      d.missing <- anti_join(raw, d.spatial)
+      d.spatial <- bind_rows(d.spatial, d.missing)
+    }
+    d.output <- d.spatial
+  }
+  d.output
 }
