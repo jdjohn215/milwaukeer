@@ -243,7 +243,7 @@ get_TrafficAccidents <- function(start_date, end_date, include_missingDate) {
 #'   for the requested time period (if specified).
 #'
 #'  Geocoding is based on the coordinates provided in the file. Refer to the data dictionary for variable descriptions:
-#'   \url{https://data.milwaukee.gov/dataset/mfdprimary/resource/ed310d17-2a6d-4334-9102-ff20f4462743}
+#'   \url{https://data.milwaukee.gov/dataset/mfdprimary/}
 #'
 #' @param start_date The first date to be included. Must be coercible to class Date.
 #' Defaults to first date available.

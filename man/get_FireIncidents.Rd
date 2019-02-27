@@ -4,8 +4,7 @@
 \alias{get_FireIncidents}
 \title{Retrieve the Fire Incident dataset}
 \usage{
-get_FireIncidents(start_date, end_date, include_missingDate, spatial,
-  shape)
+get_FireIncidents(start_date, end_date, spatial, shape)
 }
 \arguments{
 \item{start_date}{The first date to be included. Must be coercible to class Date.
@@ -13,8 +12,6 @@ Defaults to first date available.}
 
 \item{end_date}{The last date to be included. Must be coercible to class Date.
 Defaults to last date available.}
-
-\item{include_missingDate}{Logical. If TRUE values without a valid date will be included. Defaults to FALSE.}
 
 \item{shape}{An object of class sf. If included, the output will be filtered using
 st_intersection}
@@ -30,7 +27,7 @@ A dataframe.
 }
 \details{
 Geocoding is based on the coordinates provided in the file. Refer to the data dictionary for variable descriptions:
-  \url{https://data.milwaukee.gov/dataset/mfdprimary/resource/ed310d17-2a6d-4334-9102-ff20f4462743}
+  \url{https://data.milwaukee.gov/dataset/mfdprimary/}
 }
 \examples{
 get_FireIncidents()
