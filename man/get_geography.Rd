@@ -47,3 +47,6 @@ A dataframe of class sf.
 \details{
 Refer to the linked descriptions for more information:
 }
+\examples{
+get_geography(name = "neighborhoods")
+}
