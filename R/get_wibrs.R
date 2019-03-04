@@ -11,7 +11,7 @@
 #' Defaults to first date available.
 #' @param end_date The last date to be included. Must be coercible to class Date.
 #' Defaults to last date available.
-#' @param make_spatial Logical. If TRUE the output is class sf. Defaults to FALSE.
+#' @param spatial Logical. If TRUE the output is class sf. Defaults to FALSE.
 #' @param shape An object of class sf. If included, the output will be filtered using
 #' st_intersection
 #' @param include_missing Logical. If TRUE values not geocoded will be added to the output. Defaults to FALSE.
@@ -29,7 +29,7 @@
 
 # Get WIBRS crime data
 get_wibrs <- function(start_date= NULL, end_date = NULL,
-                      make_spatial = FALSE, shape, include_missing = FALSE) {
+                      spatial = FALSE, shape, include_missing = FALSE) {
 
   # Set default dates
   if(is.null(start_date)){
@@ -127,8 +127,8 @@ get_wibrs <- function(start_date= NULL, end_date = NULL,
              !is.na(RoughY))
   }
 
-  # If make_spatial is TRUE, then convert to SF
-  if(make_spatial == TRUE){
+  # If spatial is TRUE, then convert to SF
+  if(spatial == TRUE){
     d <- d %>%
       sf::st_as_sf(coords = c("x", "y"),
                    crs = 32054)

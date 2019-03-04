@@ -4,8 +4,8 @@
 \alias{get_wibrs}
 \title{Retrieve the Wisconsin Incident Based Report (WIBR) dataset}
 \usage{
-get_wibrs(start_date = NULL, end_date = NULL, make_spatial = FALSE,
-  shape, include_missing = FALSE)
+get_wibrs(start_date = NULL, end_date = NULL, spatial = FALSE, shape,
+  include_missing = FALSE)
 }
 \arguments{
 \item{start_date}{The first date to be included. Must be coercible to class Date.
@@ -14,7 +14,7 @@ Defaults to first date available.}
 \item{end_date}{The last date to be included. Must be coercible to class Date.
 Defaults to last date available.}
 
-\item{make_spatial}{Logical. If TRUE the output is class sf. Defaults to FALSE.}
+\item{spatial}{Logical. If TRUE the output is class sf. Defaults to FALSE.}
 
 \item{shape}{An object of class sf. If included, the output will be filtered using
 st_intersection}
