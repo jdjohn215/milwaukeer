@@ -39,7 +39,7 @@
 #' @importFrom sf st_read
 #'
 #' @examples
-#' get_geography(name = "neighborhoods)
+#' get_geography(name = "neighborhoods")
 
 get_geography <- function(name){
   if(name == "street.sweeping"){
