@@ -39,7 +39,7 @@ get_DelinquentRealEstate <- function(shape, spatial = FALSE, include_missing = F
   if(spatial == TRUE | !missing(shape)){
     d.spatial <- raw %>%
       mutate(uniqueID = 1:nrow(raw)) %>%
-      inner_join(mai[,c("TAXKEY", "x", "y")],
+      inner_join(milwaukeer::mai[,c("TAXKEY", "x", "y")],
                  by = c("Tax.Key.." = "TAXKEY")) %>%
       group_by(uniqueID) %>%
       filter(row_number() == 1) %>%

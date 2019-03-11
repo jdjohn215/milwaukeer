@@ -43,7 +43,7 @@ get_mai <- function(spatial = FALSE, shape, include_missing = FALSE) {
     raw$uniqueID <- 1:length(raw$TAXKEY)
 
     # match by taxkey
-    spatial1 <- inner_join(raw, mai[,c("TAXKEY", "x", "y")]) %>%
+    spatial1 <- inner_join(raw, milwaukeer::mai[,c("TAXKEY", "x", "y")]) %>%
       group_by(uniqueID) %>%
       filter(row_number() == 1) %>%
       ungroup()

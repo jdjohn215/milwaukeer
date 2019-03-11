@@ -40,7 +40,7 @@ get_PollingPlace <- function(shape, spatial = FALSE) {
   d.output <- raw
 
   if(spatial == TRUE | !missing(shape)){
-    mai <- mai %>%
+    mai <- milwaukeer::mai %>%
       mutate(address = paste(HSE_NBR, DIR, STREET, STTYPE),
              address = stringr::str_to_upper(address))
 

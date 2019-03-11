@@ -38,7 +38,7 @@ get_LeadService <- function(shape, spatial = FALSE, include_missing = FALSE){
   if(!missing(shape) | spatial == TRUE){
     d.spatial <- list()
 
-    mai <- mai %>%
+    mai <- milwaukeer::mai %>%
       mutate(address = paste(HSE_NBR, DIR, STREET, STTYPE),
              address = stringr::str_to_upper(address))
 

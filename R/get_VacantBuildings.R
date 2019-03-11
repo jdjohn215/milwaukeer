@@ -58,7 +58,7 @@ get_VacantBuildings <- function(start_date = NULL, end_date = NULL,
   if(!missing(shape) | spatial == TRUE){
     list.spatial <- list()
     date.filtered$uniqueID <- 1:nrow(date.filtered)
-    d.mai <- mai[,c("TAXKEY", "x", "y")] %>%
+    d.mai <- milwaukeer::mai[,c("TAXKEY", "x", "y")] %>%
       mutate(TAXKEY = as.character(TAXKEY))
 
     spatial1 <- inner_join(date.filtered, d.mai,

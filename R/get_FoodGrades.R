@@ -37,7 +37,7 @@ get_FoodGrades <- function(spatial = FALSE, shape, include_missing = FALSE) {
   # filter by geography if provided, make spatial if requested
   if(!missing(shape) | spatial == TRUE){
     list.spatial <- list()
-    mai <- mai %>%
+    mai <- milwaukeer::mai %>%
       mutate(ADDRESS = paste(HSE_NBR, DIR, STREET, STTYPE),
              ADDRESS = replace(ADDRESS, is.na(STTYPE),
                                stringr::str_sub(ADDRESS[is.na(STTYPE)], 1, -3)),

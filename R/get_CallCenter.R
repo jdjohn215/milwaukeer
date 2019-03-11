@@ -89,7 +89,7 @@ get_CallCenter <- function(start_date = NULL, end_date = NULL,
              uniqueID = 1:length(address_match))
 
     # join to MAI
-    mai <- mai %>%
+    mai <- milwaukeer::mai %>%
       mutate(address_all = paste(HSE_NBR, DIR, STREET, STTYPE, SFX, UNIT_NBR),
              address_all = stringr::str_replace_all(address_all, " NA ", " "),
              address_all = replace(address_all, stringr::str_sub(address_all, -3) == " NA",

@@ -68,7 +68,7 @@ get_ImprovedSales <- function(start_year = NULL, end_year = NULL,
     d.spatial <- raw %>%
       mutate(`Key.No.` = stringr::str_pad(`Key.No.`, pad = "0", width = 10, side = "left"),
              uniqueID = 1:nrow(raw)) %>%
-      inner_join(mai[,c("TAXKEY", "x", "y")],
+      inner_join(milwaukeer::mai[,c("TAXKEY", "x", "y")],
                  by = c("Key.No." = "TAXKEY")) %>%
       group_by(uniqueID) %>%
       filter(row_number() == 1) %>%

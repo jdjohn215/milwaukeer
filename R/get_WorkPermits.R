@@ -53,7 +53,7 @@ get_WorkPermits <- function(start_date = NULL, end_date = NULL,
                       sep = ",", remove = FALSE) %>%
       select(-drop)
 
-    mai <- mai %>%
+    mai <- milwaukeer::mai %>%
       mutate(STTYPE = replace(STTYPE, is.na(STTYPE), ""),
              address_match = paste(HSE_NBR, DIR, STREET, STTYPE),
              address_match = stringr::str_to_upper(address_match),

@@ -40,7 +40,7 @@ get_LiquorLicenses <- function(spatial = FALSE, shape, include_missing = FALSE) 
   if(!missing(shape) | spatial == TRUE){
     list.spatial <- list()
     raw$uniqueID <- 1:nrow(raw)
-    spatial1 <- inner_join(raw, mai[,c("TAXKEY", "x", "y")]) %>%
+    spatial1 <- inner_join(raw, milwaukeer::mai[,c("TAXKEY", "x", "y")]) %>%
       group_by(uniqueID) %>%
       filter(row_number() == 1) %>%
       ungroup()
