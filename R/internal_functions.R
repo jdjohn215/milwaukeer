@@ -49,6 +49,17 @@ remove_STTYPE <- function(data){
 
 # This function runs address strings through the city of Milwaukee's...
 # address-then-DIME geocoder.
+
+#' Retrieve the call center data dataset
+#'
+#' \code{get_CallCenter} this function runs address strings through the city of Milwaukee's
+#' address-then-DIME geocoder
+#'
+#' @param batch the data.frame
+#' @param fields the character vector of the address
+#' @return A dataframe.
+#' @export
+#'
 geocode_address <- function(batch, fields){
   prefix <- "http://maps2.milwaukee.gov/ArcGIS/rest/services/geocode/MAIthenDIME_geocode/GeocodeServer/findAddressCandidates?Street="
   suffix <-  "&SingleLine=&outFields=Loc_name&outSR=&f=json"
