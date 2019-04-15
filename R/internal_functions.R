@@ -52,7 +52,7 @@ remove_STTYPE <- function(data){
 
 #' Retrieve the call center data dataset
 #'
-#' \code{get_CallCenter} this function runs address strings through the city of Milwaukee's
+#' \code{geocode_address} this function runs address strings through the city of Milwaukee's
 #' address-then-DIME geocoder
 #'
 #' @param batch the data.frame

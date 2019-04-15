@@ -15,6 +15,6 @@ geocode_address(batch, fields)
 A dataframe.
 }
 \description{
-\code{get_CallCenter} this function runs address strings through the city of Milwaukee's
+\code{geocode_address} this function runs address strings through the city of Milwaukee's
 address-then-DIME geocoder
 }
