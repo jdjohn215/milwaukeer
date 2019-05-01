@@ -26,7 +26,7 @@
 get_DelinquentRealEstate <- function(shape, spatial = FALSE, include_missing = FALSE) {
 
   ckanr_setup(url = "https://data.milwaukee.gov")
-  res <- resource_show(id = "a1291cf2-2c11-4a04-90ac-e86e0a03a52e", as = "table")
+  res <- resource_show(id = "83deeba1-0db5-4e2a-a39a-68e745ca1c20", as = "table")
   start <- Sys.time()
   raw <- fetch(res$url)
   end <- Sys.time()
