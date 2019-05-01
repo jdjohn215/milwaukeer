@@ -33,7 +33,7 @@ get_mai <- function(spatial = FALSE, shape, include_missing = FALSE) {
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))
-  raw$TAXKEY <- str_pad(raw$TAXKEY, width = 10, side = "left", pad = "0")
+  raw$TAXKEY <- stringr::str_pad(raw$TAXKEY, width = 10, side = "left", pad = "0")
   raw
 
   d.final <- raw
