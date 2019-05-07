@@ -79,7 +79,7 @@ get_FireIncidents <- function(start_date = NULL, end_date = NULL,
     raw.list[[length(raw.list)+1]] <- raw2017
   }
   if(2018 %in% years.list == TRUE){
-    raw2018 <- readr::read_csv("https://data.milwaukee.gov/dataset/c62f2c78-da2e-48d8-9215-37fb11c143f1/resource/ed310d17-2a6d-4334-9102-ff20f4462743/download/mfdprimary.csv",
+    raw2018 <- readr::read_csv("https://data.milwaukee.gov/dataset/b61a89f7-1604-4b3a-b465-42f5a1e232bc/resource/18d887be-4254-4386-b9b4-f1a8c016db38/download/mfdprimaryarchive-1.csv",
                                col_types = readr::cols(.default = "c")) %>%
       filter(`Case Number` != "Case Number") %>%
       tidyr::separate(col = "Date Received", into = c("DateReceived", "TimeReceived"),
