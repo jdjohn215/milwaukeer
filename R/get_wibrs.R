@@ -29,7 +29,7 @@
 
 # Get WIBRS crime data
 get_wibrs <- function(start_date= NULL, end_date = NULL,
-                      spatial = FALSE, shape, include_missing = FALSE) {
+                      spatial = FALSE, shape = NULL, include_missing = FALSE) {
 
   # Set default dates
   if(is.null(start_date)){
@@ -134,7 +134,7 @@ get_wibrs <- function(start_date= NULL, end_date = NULL,
                    crs = 32054)
 
     # If shape is specified, perform intersection with it
-    if(!missing(shape)){
+    if(!is.null(shape)){
       d <- d %>%
         st_transform(crs = st_crs(shape)) %>%
         st_intersection(shape)
