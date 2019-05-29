@@ -75,8 +75,8 @@ get_PollingPlace <- function(shape, spatial = FALSE) {
 
     if(!missing(shape)){
       d.spatial <- d.spatial %>%
-      #sf::st_transform(crs = sf::st_crs(shape)) %>%
-      sf::st_intersection(st_transform(shape, crs = 32054))
+      sf::st_transform(crs = sf::st_crs(shape)) %>%
+      sf::st_intersection(shape)
     }
 
     if(spatial == FALSE){
