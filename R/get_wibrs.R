@@ -128,7 +128,7 @@ get_wibrs <- function(start_date= NULL, end_date = NULL,
   }
 
   # If spatial is TRUE, then convert to SF
-  if(spatial == TRUE){
+  if(!is.null(shape) | spatial == TRUE){
     d <- d %>%
       sf::st_as_sf(coords = c("x", "y"),
                    crs = 32054)
@@ -142,6 +142,10 @@ get_wibrs <- function(start_date= NULL, end_date = NULL,
     print(paste(length(date.filtered$IncidentNum[is.na(date.filtered$RoughX)]), "out of",
                 length(date.filtered$IncidentNum),
                 "incidents not assigned coordinates. Use include_missing = TRUE to view them"))
+  }
+
+  if(!is.null(shape) & spatial == FALSE){
+    d <- st_set_geometry(d, NULL)
   }
 
   complete <- d
