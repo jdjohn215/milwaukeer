@@ -20,7 +20,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -40,7 +40,7 @@ get_GarbageViolations <- function(start_date = NULL, end_date = NULL, shape,
   ckanr_setup(url = "https://data.milwaukee.gov")
   start <- Sys.time()
   res.historical <- resource_show(id = "665d15b0-71b7-45cd-9864-4648fec06219", as = "table")
-  raw.historical <- fetch(res.historical$url) %>%
+  raw.historical <- ckan_fetch(res.historical$url) %>%
     mutate_all(as.character)
   # res.current <- resource_show(id = "9424b207-86b9-4914-9fb9-4ed47f37e260", as = "table")
   # raw.current <- fetch(res.current$url) %>%

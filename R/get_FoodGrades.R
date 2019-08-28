@@ -17,7 +17,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -28,7 +28,7 @@ get_FoodGrades <- function(spatial = FALSE, shape, include_missing = FALSE) {
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "e2fecdb9-3de9-4d34-955e-17d2e815bad6", as = "table")
   start <- Sys.time()
-  raw <- fetch(res$url)
+  raw <- ckan_fetch(res$url)
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))

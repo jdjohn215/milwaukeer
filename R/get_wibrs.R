@@ -20,7 +20,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -42,7 +42,7 @@ get_wibrs <- function(start_date= NULL, end_date = NULL,
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "87843297-a6fa-46d4-ba5d-cb342fb2d3bb", as = "table")
   start <- Sys.time()
-  raw <- fetch(res$url)
+  raw <- ckan_fetch(res$url)
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))

@@ -19,7 +19,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -33,7 +33,7 @@ get_VacantBuildings <- function(start_date = NULL, end_date = NULL,
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "46dca88b-fec0-48f1-bda6-7296249ea61f", as = "table")
   start <- Sys.time()
-  raw <- fetch(res$url)
+  raw <- ckan_fetch(res$url)
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))

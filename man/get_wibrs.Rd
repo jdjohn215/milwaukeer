@@ -4,8 +4,8 @@
 \alias{get_wibrs}
 \title{Retrieve the Wisconsin Incident Based Report (WIBR) dataset}
 \usage{
-get_wibrs(start_date = NULL, end_date = NULL, spatial = FALSE, shape,
-  include_missing = FALSE)
+get_wibrs(start_date = NULL, end_date = NULL, spatial = FALSE,
+  shape = NULL, include_missing = FALSE)
 }
 \arguments{
 \item{start_date}{The first date to be included. Must be coercible to class Date.

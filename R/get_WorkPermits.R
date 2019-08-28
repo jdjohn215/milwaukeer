@@ -19,7 +19,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -32,7 +32,7 @@ get_WorkPermits <- function(start_date = NULL, end_date = NULL,
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "828e9630-d7cb-42e4-960e-964eae916397", as = "table")
   start <- Sys.time()
-  raw <- fetch(res$url)
+  raw <- ckan_fetch(res$url)
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))

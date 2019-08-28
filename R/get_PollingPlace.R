@@ -20,7 +20,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -32,7 +32,7 @@ get_PollingPlace <- function(shape, spatial = FALSE) {
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "b50aed9e-2893-483c-a56a-3c51530c2cc9", as = "table")
   start <- Sys.time()
-  raw <- fetch(res$url)
+  raw <- ckan_fetch(res$url)
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))

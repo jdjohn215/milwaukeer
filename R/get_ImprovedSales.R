@@ -18,7 +18,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -34,27 +34,27 @@ get_ImprovedSales <- function(start_year = NULL, end_year = NULL,
   df.list <- list()
   if(is.element(2014, years)){
     res14 <- resource_show(id = "147ce69a-6fe4-41e2-b8c5-fd7e234068c1", as = "table")
-    raw14 <- fetch(res14$url) %>%
+    raw14 <- ckan_fetch(res14$url) %>%
       mutate_all(as.character) %>%
       rename(`Key.No.` = `Key.No..`, `Property.Type` = `Property.Type.`)
     df.list[[length(df.list)+1]] <- raw14
   }
   if(is.element(2015, years)){
     res15 <- resource_show(id = "f533f6ad-1328-4d3f-bc50-f8fc0e2bc14a", as = "table")
-    raw15 <- fetch(res15$url) %>%
+    raw15 <- ckan_fetch(res15$url) %>%
       mutate_all(as.character)
     df.list[[length(df.list)+1]] <- raw15
   }
   if(is.element(2016, years)){
     res16 <- resource_show(id = "ca2fcfb8-b9aa-4e4b-8e36-c5df34a01fbb", as = "table")
-    raw16 <- fetch(res16$url) %>%
+    raw16 <- ckan_fetch(res16$url) %>%
       mutate_all(as.character) %>%
       rename(`Sale.Price` = `Sale.Price.`)
     df.list[[length(df.list)+1]] <- raw16
   }
   if(is.element(2017, years)){
     res17 <- resource_show(id = "c0ca342b-e3de-4b7c-8852-205e294b00d8", as = "table")
-    raw17 <- fetch(res17$url) %>%
+    raw17 <- ckan_fetch(res17$url) %>%
       mutate_all(as.character)
     df.list[[length(df.list)+1]] <- raw17
   }

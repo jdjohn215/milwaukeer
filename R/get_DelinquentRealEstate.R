@@ -16,7 +16,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -28,7 +28,7 @@ get_DelinquentRealEstate <- function(shape, spatial = FALSE, include_missing = F
   ckanr_setup(url = "https://data.milwaukee.gov")
   res <- resource_show(id = "83deeba1-0db5-4e2a-a39a-68e745ca1c20", as = "table")
   start <- Sys.time()
-  raw <- fetch(res$url)
+  raw <- ckan_fetch(res$url)
   end <- Sys.time()
   fetchTime <- difftime(end, start, units = "secs")
   print(paste("Download time:", round(fetchTime, 2), "seconds."))

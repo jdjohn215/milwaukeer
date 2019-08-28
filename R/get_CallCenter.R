@@ -22,7 +22,7 @@
 #' @import dplyr
 #' @import sf
 #' @importFrom ckanr resource_show
-#' @importFrom ckanr fetch
+#' @importFrom ckanr ckan_fetch
 #' @importFrom ckanr ckanr_setup
 #'
 #' @examples
@@ -46,14 +46,14 @@ get_CallCenter <- function(start_date = NULL, end_date = NULL,
   # If start_date is missing, then fetch historical file
   if(start_date < as.Date("2019-01-01")){
     res.historical <- resource_show(id = "abdfe983-e856-40cd-bee2-85e78454344a", as = "table")
-    raw.historical <- fetch(res.historical$url) %>%
+    raw.historical <- ckan_fetch(res.historical$url) %>%
       mutate_all(as.character)
     df.list[[length(df.list)+1]] <- raw.historical
   }
   # check if start_date precedes 2018, if yes, fetch historical
   if(end_date > as.Date("2019-01-01")){
     res.current <- resource_show(id = "bf2b508a-5bfa-49da-8846-d87ffeee020a", as = "table")
-    raw.current <- fetch(res.current$url) %>%
+    raw.current <- ckan_fetch(res.current$url) %>%
       mutate_all(as.character)
     df.list[[length(df.list)+1]] <- raw.current
   }
